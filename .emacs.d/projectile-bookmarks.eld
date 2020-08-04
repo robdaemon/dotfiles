@@ -1,0 +1,1 @@
+("~/src/metabase-enterprise/" "~/src/metabase/")
