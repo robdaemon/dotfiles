@@ -1,3 +1,5 @@
+(add-to-list 'load-path "~/.emacs.d/local")
+
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
@@ -117,6 +119,26 @@
   :ensure t
   :config
   (global-set-key (kbd "C-c >") 'indent-tools-hydra/body))
+
+;; always use auto-fill-mode when in text mode
+;;   (stops emacs from line wrapping in makefiles !)
+(add-hook 'text-mode-hook
+	  '(lambda () (auto-fill-mode 1)))
+
+;; auto load definitions
+
+(defun prepend-to-auto-mode-alist (pair)
+  "Add PAIR onto start of auto-mode-alist"
+  (setq auto-mode-alist (cons pair auto-mode-alist)))
+
+(prepend-to-auto-mode-alist ' ("\\.mod$" . gm2-mode))
+(prepend-to-auto-mode-alist ' ("\\.def$" . gm2-mode))
+
+(autoload 'gm2-mode "gm2-mode" "GNU Modula-2 mode")
+
+(prepend-to-auto-mode-alist '("\\.v$" . verilog-mode))
+(prepend-to-auto-mode-alist '("\\.sv$" . verilog-mode))
+(autoload 'verilog-mode "verilog-mode" "Verilog Mode")
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.

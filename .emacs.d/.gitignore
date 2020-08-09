@@ -1,2 +1,8 @@
 auto-save-list/
 elpa/
+*.elc
+recentf
+projectile-bookmarks.eld
+*.swp
+*~
+
