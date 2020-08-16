@@ -5,4 +5,4 @@ recentf
 projectile-bookmarks.eld
 *.swp
 *~
-
+*.o

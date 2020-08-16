@@ -140,6 +140,10 @@
 (prepend-to-auto-mode-alist '("\\.sv$" . verilog-mode))
 (autoload 'verilog-mode "verilog-mode" "Verilog Mode")
 
+(prepend-to-auto-mode-alist '("\\.m3$" . modula-3-mode))
+(prepend-to-auto-mode-alist '("\\.i3$" . modula-3-mode))
+(require 'modula3)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -150,6 +154,7 @@
    (quote
     ("06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" default)))
  '(global-display-line-numbers-mode t)
+ '(inhibit-startup-screen t)
  '(package-selected-packages
    (quote
     (color-theme-sanityinc-tomorrow clj-refactor flycheck-clojure flycheck company cider clojure-mode projectile ivy use-package)))
