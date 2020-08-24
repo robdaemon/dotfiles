@@ -1,3 +1,5 @@
+(add-to-list 'load-path "~/.emacs.d/local")
+
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
@@ -144,6 +146,30 @@
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
+;; always use auto-fill-mode when in text mode
+;;   (stops emacs from line wrapping in makefiles !)
+(add-hook 'text-mode-hook
+	  '(lambda () (auto-fill-mode 1)))
+
+;; auto load definitions
+
+(defun prepend-to-auto-mode-alist (pair)
+  "Add PAIR onto start of auto-mode-alist"
+  (setq auto-mode-alist (cons pair auto-mode-alist)))
+
+(prepend-to-auto-mode-alist ' ("\\.mod$" . gm2-mode))
+(prepend-to-auto-mode-alist ' ("\\.def$" . gm2-mode))
+
+(autoload 'gm2-mode "gm2-mode" "GNU Modula-2 mode")
+
+(prepend-to-auto-mode-alist '("\\.v$" . verilog-mode))
+(prepend-to-auto-mode-alist '("\\.sv$" . verilog-mode))
+(autoload 'verilog-mode "verilog-mode" "Verilog Mode")
+
+(prepend-to-auto-mode-alist '("\\.m3$" . modula-3-mode))
+(prepend-to-auto-mode-alist '("\\.i3$" . modula-3-mode))
+(require 'modula3)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -151,46 +177,73 @@
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
  '(custom-safe-themes
-   '("06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" default))
+   (quote
+    ("06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" default)))
  '(global-display-line-numbers-mode t)
  '(inhibit-startup-screen t)
  '(package-selected-packages
-   '(color-theme-sanityinc-tomorrow clj-refactor flycheck-clojure flycheck company cider clojure-mode projectile ivy use-package))
+   (quote
+    (color-theme-sanityinc-tomorrow clj-refactor flycheck-clojure flycheck company cider clojure-mode projectile ivy use-package)))
  '(safe-local-variable-values
-   '((js2-mode-show-strict-warnings)
-     (js2-mode-show-parse-errors)
-     (eval add-to-list
-	   (make-local-variable 'clojure-align-cond-forms)
-	   "are+")
-     (cljr-favor-prefix-notation . t)
+   (quote
+    ((cljr-favor-prefix-notation . t)
      (eval progn
-	   (put 'defendpoint 'clojure-doc-string-elt 3)
-	   (put 'defendpoint-async 'clojure-doc-string-elt 3)
-	   (put 'api/defendpoint 'clojure-doc-string-elt 3)
-	   (put 'api/defendpoint-async 'clojure-doc-string-elt 3)
-	   (put 'defsetting 'clojure-doc-string-elt 2)
-	   (put 'setting/defsetting 'clojure-doc-string-elt 2)
-	   (put 's/defn 'clojure-doc-string-elt 2)
-	   (put 'p\.types/defprotocol+ 'clojure-doc-string-elt 2)
+	   (put
+	    (quote defendpoint)
+	    (quote clojure-doc-string-elt)
+	    3)
+	   (put
+	    (quote defendpoint-async)
+	    (quote clojure-doc-string-elt)
+	    3)
+	   (put
+	    (quote api/defendpoint)
+	    (quote clojure-doc-string-elt)
+	    3)
+	   (put
+	    (quote api/defendpoint-async)
+	    (quote clojure-doc-string-elt)
+	    3)
+	   (put
+	    (quote defsetting)
+	    (quote clojure-doc-string-elt)
+	    2)
+	   (put
+	    (quote setting/defsetting)
+	    (quote clojure-doc-string-elt)
+	    2)
+	   (put
+	    (quote s/defn)
+	    (quote clojure-doc-string-elt)
+	    2)
+	   (put
+	    (quote p\.types/defprotocol+)
+	    (quote clojure-doc-string-elt)
+	    2)
 	   (define-clojure-indent
 	     (let-404 1)
 	     (match 1)
 	     (merge-with 1)
 	     (p\.types/defprotocol+
-	      '(1
-		(:defn)))
+	      (quote
+	       (1
+		(:defn))))
 	     (p\.types/def-abstract-type
-	      '(1
-		(:defn)))
+	      (quote
+	       (1
+		(:defn))))
 	     (p\.types/deftype+
-	      '(2 nil nil
-		  (:defn)))
+	      (quote
+	       (2 nil nil
+		  (:defn))))
 	     (p/def-map-type
-	      '(2 nil nil
-		  (:defn)))
+	      (quote
+	       (2 nil nil
+		  (:defn))))
 	     (p\.types/defrecord+
-	      '(2 nil nil
-		  (:defn)))))))
+	      (quote
+	       (2 nil nil
+		  (:defn)))))))))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
