@@ -1,1 +1,1 @@
-("~/src/metabase-enterprise/" "~/src/metabase/")
+("~/dotfiles/" "~/src/metabase/" "~/src/metabase-enterprise/" "~/src/clojure.java-time/")

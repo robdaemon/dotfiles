@@ -86,17 +86,41 @@
   (add-to-list 'auto-mode-alist '("\\.jsx?\\'" . js2-jsx-mode))
   (add-to-list 'interpreter-mode-alist '("node" . js2-jsx-mode)))
 
+(use-package prettier
+  :ensure t
+  :config
+  (add-hook 'js2-mode-hook #'prettier-mode))
+
 (use-package flow-js2-mode
   :ensure t
   :config
   (add-hook 'js2-mode-hook #'flow-js2-mode))
 
-(use-package smartparens
+(use-package rainbow-delimiters
   :ensure t
   :config
+  (defvar on-mode-hooks
+  '(emacs-lisp-mode-hook python-mode-hook js2-mode-hook shell-mode-hook shell-script-mode-hook sh-mode cider-repl-mode-hook))
+  (defun enable-rainbow-delimiters (mode-hook)
+    "Enable rainbow delimiters in MODE-HOOK."
+    (add-hook mode-hook #'rainbow-delimiters-mode))
+  (mapc 'enable-rainbow-delimiters on-mode-hooks))
+
+(use-package smartparens
+  :ensure t
+  :init
   (require 'smartparens-config)
-  (setq smartparens-strict-mode t)
-  (smartparens-global-mode t))
+  (show-smartparens-global-mode t)
+  (smartparens-global-mode t)
+  (smartparens-global-strict-mode t)
+  (sp-use-smartparens-bindings)
+  (sp-with-modes '(minibuffer-inactive-mode cider-repl-mode clojure-mode emacs-lisp-mode)
+    (sp-local-pair "'" nil :actions nil))
+  :config
+  :delight smartparens-mode
+  :bind (("M-(" . sp-wrap-round)
+	 ("M-[" . sp-wrap-square)
+	 ("M-{" . sp-wrap-curly)))
 
 (use-package yasnippet
   :ensure t
@@ -118,6 +142,8 @@
   :config
   (global-set-key (kbd "C-c >") 'indent-tools-hydra/body))
 
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -125,72 +151,46 @@
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
  '(custom-safe-themes
-   (quote
-    ("06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" default)))
+   '("06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" default))
  '(global-display-line-numbers-mode t)
+ '(inhibit-startup-screen t)
  '(package-selected-packages
-   (quote
-    (color-theme-sanityinc-tomorrow clj-refactor flycheck-clojure flycheck company cider clojure-mode projectile ivy use-package)))
+   '(color-theme-sanityinc-tomorrow clj-refactor flycheck-clojure flycheck company cider clojure-mode projectile ivy use-package))
  '(safe-local-variable-values
-   (quote
-    ((cljr-favor-prefix-notation . t)
+   '((js2-mode-show-strict-warnings)
+     (js2-mode-show-parse-errors)
+     (eval add-to-list
+	   (make-local-variable 'clojure-align-cond-forms)
+	   "are+")
+     (cljr-favor-prefix-notation . t)
      (eval progn
-	   (put
-	    (quote defendpoint)
-	    (quote clojure-doc-string-elt)
-	    3)
-	   (put
-	    (quote defendpoint-async)
-	    (quote clojure-doc-string-elt)
-	    3)
-	   (put
-	    (quote api/defendpoint)
-	    (quote clojure-doc-string-elt)
-	    3)
-	   (put
-	    (quote api/defendpoint-async)
-	    (quote clojure-doc-string-elt)
-	    3)
-	   (put
-	    (quote defsetting)
-	    (quote clojure-doc-string-elt)
-	    2)
-	   (put
-	    (quote setting/defsetting)
-	    (quote clojure-doc-string-elt)
-	    2)
-	   (put
-	    (quote s/defn)
-	    (quote clojure-doc-string-elt)
-	    2)
-	   (put
-	    (quote p\.types/defprotocol+)
-	    (quote clojure-doc-string-elt)
-	    2)
+	   (put 'defendpoint 'clojure-doc-string-elt 3)
+	   (put 'defendpoint-async 'clojure-doc-string-elt 3)
+	   (put 'api/defendpoint 'clojure-doc-string-elt 3)
+	   (put 'api/defendpoint-async 'clojure-doc-string-elt 3)
+	   (put 'defsetting 'clojure-doc-string-elt 2)
+	   (put 'setting/defsetting 'clojure-doc-string-elt 2)
+	   (put 's/defn 'clojure-doc-string-elt 2)
+	   (put 'p\.types/defprotocol+ 'clojure-doc-string-elt 2)
 	   (define-clojure-indent
 	     (let-404 1)
 	     (match 1)
 	     (merge-with 1)
 	     (p\.types/defprotocol+
-	      (quote
-	       (1
-		(:defn))))
+	      '(1
+		(:defn)))
 	     (p\.types/def-abstract-type
-	      (quote
-	       (1
-		(:defn))))
+	      '(1
+		(:defn)))
 	     (p\.types/deftype+
-	      (quote
-	       (2 nil nil
-		  (:defn))))
+	      '(2 nil nil
+		  (:defn)))
 	     (p/def-map-type
-	      (quote
-	       (2 nil nil
-		  (:defn))))
+	      '(2 nil nil
+		  (:defn)))
 	     (p\.types/defrecord+
-	      (quote
-	       (2 nil nil
-		  (:defn)))))))))
+	      '(2 nil nil
+		  (:defn)))))))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -203,3 +203,4 @@
   :ensure t
   :config
   (load-theme 'sanityinc-tomorrow-night))
+(put 'upcase-region 'disabled nil)
