@@ -54,11 +54,6 @@
 (use-package clojure-mode
   :ensure t)
 
-(use-package cider
-  :ensure t
-  :config
-  (add-hook 'clojure-mode-hook #'cider-mode))
-
 (use-package company
   :ensure t
   :config
@@ -71,7 +66,22 @@
 
 (use-package flycheck-clojure
   :ensure t
+  :defer t
+  :commands (flycheck-clojure-setup)               ;; autoload
   :config
+  (eval-after-load 'flycheck
+    '(setq flycheck-display-errors-function #'flycheck-pos-tip-error-messages))
+  (add-hook 'after-init-hook #'global-flycheck-mode))
+
+(use-package flycheck-pos-tip
+  :ensure t
+  :after flycheck)
+
+(use-package cider
+  :ensure t
+  :defer t
+  :config
+  (add-hook 'clojure-mode-hook #'cider-mode)
   (flycheck-clojure-setup))
 
 (use-package flycheck-flow
