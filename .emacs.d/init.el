@@ -62,15 +62,22 @@
 (use-package company
   :ensure t
   :config
-  (global-company-mode))
+  (global-company-mode)
+  (add-to-list 'company-backends 'company-flow))
 
 (use-package flycheck
-  :ensure t)
+  :ensure t
+  :init (global-flycheck-mode))
 
 (use-package flycheck-clojure
   :ensure t
   :config
   (flycheck-clojure-setup))
+
+(use-package flycheck-flow
+  :ensure t
+  :config
+  (flycheck-add-mode 'javascript-flow 'flow-minor-mode))
 
 (use-package clj-refactor
   :ensure t
@@ -81,22 +88,22 @@
   :ensure t
   :bind (("C-c C-r" . cljr-ivy)))
 
+(use-package flow-js2-mode
+  :ensure t)
+
+(use-package prettier
+  :ensure t)
+
 (use-package js2-mode
   :ensure t
   :config
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-  (add-to-list 'auto-mode-alist '("\\.jsx?\\'" . js2-jsx-mode))
-  (add-to-list 'interpreter-mode-alist '("node" . js2-jsx-mode)))
-
-(use-package prettier
-  :ensure t
-  :config
-  (add-hook 'js2-mode-hook #'prettier-mode))
-
-(use-package flow-js2-mode
-  :ensure t
-  :config
-  (add-hook 'js2-mode-hook #'flow-js2-mode))
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . js-mode))
+  (add-to-list 'auto-mode-alist '("\\.jsx?\\'" . js-mode))
+  (add-to-list 'interpreter-mode-alist '("node" . js-mode))
+  (add-hook 'js-mode-hook (lambda ()
+			    (js2-minor-mode)
+			    (flow-minor-mode)
+			    (prettier-mode))))
 
 (use-package rainbow-delimiters
   :ensure t
@@ -177,73 +184,47 @@
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
  '(custom-safe-themes
-   (quote
-    ("06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" default)))
+   '("06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" default))
+ '(flycheck-javascript-flow-args nil)
  '(global-display-line-numbers-mode t)
  '(inhibit-startup-screen t)
+ '(js-jsx-syntax t)
  '(package-selected-packages
-   (quote
-    (color-theme-sanityinc-tomorrow clj-refactor flycheck-clojure flycheck company cider clojure-mode projectile ivy use-package)))
+   '(color-theme-sanityinc-tomorrow clj-refactor flycheck-clojure flycheck company cider clojure-mode projectile ivy use-package))
+ '(prettier-enabled-parsers '(babel-flow css json html scss toml typescript xml yaml))
+ '(prettier-infer-parser-flag t)
  '(safe-local-variable-values
-   (quote
-    ((cljr-favor-prefix-notation . t)
+   '((js2-mode-show-strict-warnings)
+     (js2-mode-show-parse-errors)
+     (cljr-favor-prefix-notation . t)
      (eval progn
-	   (put
-	    (quote defendpoint)
-	    (quote clojure-doc-string-elt)
-	    3)
-	   (put
-	    (quote defendpoint-async)
-	    (quote clojure-doc-string-elt)
-	    3)
-	   (put
-	    (quote api/defendpoint)
-	    (quote clojure-doc-string-elt)
-	    3)
-	   (put
-	    (quote api/defendpoint-async)
-	    (quote clojure-doc-string-elt)
-	    3)
-	   (put
-	    (quote defsetting)
-	    (quote clojure-doc-string-elt)
-	    2)
-	   (put
-	    (quote setting/defsetting)
-	    (quote clojure-doc-string-elt)
-	    2)
-	   (put
-	    (quote s/defn)
-	    (quote clojure-doc-string-elt)
-	    2)
-	   (put
-	    (quote p\.types/defprotocol+)
-	    (quote clojure-doc-string-elt)
-	    2)
+	   (put 'defendpoint 'clojure-doc-string-elt 3)
+	   (put 'defendpoint-async 'clojure-doc-string-elt 3)
+	   (put 'api/defendpoint 'clojure-doc-string-elt 3)
+	   (put 'api/defendpoint-async 'clojure-doc-string-elt 3)
+	   (put 'defsetting 'clojure-doc-string-elt 2)
+	   (put 'setting/defsetting 'clojure-doc-string-elt 2)
+	   (put 's/defn 'clojure-doc-string-elt 2)
+	   (put 'p\.types/defprotocol+ 'clojure-doc-string-elt 2)
 	   (define-clojure-indent
 	     (let-404 1)
 	     (match 1)
 	     (merge-with 1)
 	     (p\.types/defprotocol+
-	      (quote
-	       (1
-		(:defn))))
+	      '(1
+		(:defn)))
 	     (p\.types/def-abstract-type
-	      (quote
-	       (1
-		(:defn))))
+	      '(1
+		(:defn)))
 	     (p\.types/deftype+
-	      (quote
-	       (2 nil nil
-		  (:defn))))
+	      '(2 nil nil
+		  (:defn)))
 	     (p/def-map-type
-	      (quote
-	       (2 nil nil
-		  (:defn))))
+	      '(2 nil nil
+		  (:defn)))
 	     (p\.types/defrecord+
-	      (quote
-	       (2 nil nil
-		  (:defn)))))))))
+	      '(2 nil nil
+		  (:defn)))))))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
