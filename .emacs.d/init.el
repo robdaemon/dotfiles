@@ -187,6 +187,9 @@
 (prepend-to-auto-mode-alist '("\\.i3$" . modula-3-mode))
 (require 'modula3)
 
+(require 'gas-mode)
+(add-to-list 'auto-mode-alist '("\\.S\\'" . gas-mode))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
